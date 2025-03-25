@@ -9,6 +9,8 @@ namespace TMS.DOMAIN.Entities
     {
         public T Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string? CreatedByID { get; set; }
+        public ApplicationUser CreatedBy { get; set; } = null!;
+        public string CreatedById { get; set; } = null!;
+
     }
 }

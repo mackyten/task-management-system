@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TMS.INFRASTRUCTURE.Persistence;
@@ -11,9 +12,11 @@ using TMS.INFRASTRUCTURE.Persistence;
 namespace TMS.INFRASTRUCTURE.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250325111904_00.00.02")]
+    partial class _000002
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,8 +249,7 @@ namespace TMS.INFRASTRUCTURE.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("CreatedById")
-                        .IsRequired()
+                    b.Property<string>("CreatedByID")
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
@@ -261,8 +263,6 @@ namespace TMS.INFRASTRUCTURE.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Tasks");
                 });
@@ -316,17 +316,6 @@ namespace TMS.INFRASTRUCTURE.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TMS.DOMAIN.Entities.TaskItem", b =>
-                {
-                    b.HasOne("TMS.DOMAIN.Entities.ApplicationUser", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
                 });
 #pragma warning restore 612, 618
         }
