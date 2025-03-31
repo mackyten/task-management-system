@@ -10,10 +10,10 @@ namespace TMS.APPLICATION.Common.Mappings
 {
     public class ApplicationUserMappingProfile : Profile
     {
-        public ApplicationUserMappingProfile()
-        {
-            CreateMap<AppUserDTO, ApplicationUser>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email)); // Example mapping
-        }
+        // public ApplicationUserMappingProfile()
+        // {
+        //     CreateMap<AppUserDTO, ApplicationUser>()
+        //         .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email)); // Example mapping
+        // }
     }
 }
