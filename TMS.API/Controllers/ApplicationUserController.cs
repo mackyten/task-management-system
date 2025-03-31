@@ -3,60 +3,58 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TMS.APPLICATION.Common;
 using TMS.APPLICATION.Common.Responses;
 using TMS.APPLICATION.DTOs;
-using TMS.APPLICATION.Features.TaskItems.Command.Create;
-using Command = TMS.APPLICATION.Features.TaskItems.Command;
-using Queries = TMS.APPLICATION.Features.TaskItems.Queries;
+using Commands = TMS.APPLICATION.Features.ApplicationUsers.Commands;
+using Queries = TMS.APPLICATION.Features.ApplicationUsers.Queries;
 
 namespace TMS.API.Controllers
 {
     [ApiController]
-    [Route("api/tasks")]
-    public class TaskItemController : BaseController
+    [Route("api/users")]
+    public class ApplicationUserController : BaseController
     {
 
         /// <summary>
-        /// Get a task by ID
+        /// Get a user by Id
         /// </summary>
-        [HttpGet("{taskId}")]
-        [ProducesResponseType(typeof(SuccessResponse<TaskItemResponseDTO>), (int)HttpStatusCode.OK)]
+        [HttpGet("{userId}")]
+        [ProducesResponseType(typeof(SuccessResponse<AppUserDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(NotFoundResponse), (int)HttpStatusCode.NotFound)]
-        public async Task<IActionResult> GetTaskById([FromRoute] int taskId)
+        public async Task<IActionResult> GetByUserId([FromRoute] string userId)
         {
-            var query = new Queries.GetById.Query { TaskId = taskId };
+            var query = new Queries.GetById.Query { Id = userId };
             var result = await Mediator.Send(query);
 
             return result switch
             {
                 NotFoundResponse notFound => NotFound(notFound),
-                SuccessResponse<TaskItemResponseDTO> success => Ok(success),
+                SuccessResponse<AppUserDTO> success => Ok(success),
                 _ => StatusCode(500, new { Message = "An unexpected error occurred." })
             };
         }
 
 
         /// <summary>
-        /// Create a new task
+        /// Creates a new user
         /// </summary>
         [HttpPost()]
-        [ProducesResponseType(typeof(SuccessResponse<TaskItemResponseDTO>), (int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(SuccessResponse<AppUserDTO>), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BadRequestResponse), (int)HttpStatusCode.BadRequest)]
-        public async Task<IActionResult> CreateTask([FromBody] Command.Create.Command command)
+        public async Task<IActionResult> CreateUser([FromBody] Commands.Create.Command command)
         {
             var result = await Mediator.Send(command);
+
 
             return result switch
             {
                 BadRequestResponse badRequest => BadRequest(badRequest),
-                SuccessResponse<TaskItemResponseDTO> success => CreatedAtAction(nameof(GetTaskById), new { taskId = success.Data.Id }, success),
+                SuccessResponse<AppUserDTO> success => CreatedAtAction(nameof(GetByUserId), new { userId = success.Data.Id }, success),
                 _ => StatusCode(500, new { Message = "An unexpected error occurred." })
             };
         }
+
 
     }
 }

@@ -8,97 +8,55 @@ using Swashbuckle.AspNetCore.Filters;
 namespace TMS.API.Configuration
 {
     public class Swash
-    {
-        internal static void RegisterSwagger(WebApplicationBuilder builder)
+ {
+
+        internal static void RegisterSwash(WebApplicationBuilder builder)
         {
-            var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Swash>>();
+            var aspEnv = builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value;
+            var clinetEnv = builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value;
 
-            try
+            if (clinetEnv == "Local" || aspEnv == "Development" || aspEnv == "Production" || aspEnv == "Test")
             {
-                logger.LogInformation("Registering Swagger...");
-                var aspEnv = builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value;
-                if (aspEnv == "Local" || aspEnv == "Development" || aspEnv == "Production")
+                builder.Services.AddSwaggerGen(options =>
                 {
-                    builder.Services.AddSwaggerGen(options =>
+                    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                     {
-                        options.SwaggerDoc("v1", new OpenApiInfo
-                        {
-                            Version = "v1",
-                            Title = $"ProjectAPI {aspEnv}",
-                        });
-                        options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-                        {
-                            Name = "Authorization",
-                            In = ParameterLocation.Header,
-                            Type = SecuritySchemeType.ApiKey,
-                        });
-                        options.OperationFilter<SecurityRequirementsOperationFilter>();
+                        Name = "Authorization",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Description = "Copy 'Bearer ' + valid JWT token into field",
+                        // Scheme = "Bearer",
                     });
-                }
-                logger.LogInformation("Swagger Registered.");
-
-            }
-            catch (Exception e)
-            {
-                logger.LogInformation($"Error Occured at RegisterSwagger : {e.GetBaseException().Message}");
-                throw new Exception($"Error Occured at RegisterSwagger : {e.GetBaseException().Message}");
+                    options.OperationFilter<SecurityRequirementsOperationFilter>();
+                    options.CustomSchemaIds(x => x.FullName);
+                });
             }
         }
-
 
         internal static void ConfigureSwash(WebApplication app, WebApplicationBuilder builder)
         {
-            var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Swash>>();
-            try
-            {
-                logger.LogInformation("Configuring Swash...");
+            var aspEnv = builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value;
 
-                var aspEnv = builder.Configuration.GetSection("ASPNETCORE_ENVIRONMENT")?.Value;
-                if (app.Environment.IsDevelopment() || app.Environment.IsProduction() || aspEnv == "Local" || aspEnv == "Test")
+            if (app.Environment.IsDevelopment() || app.Environment.IsProduction() || aspEnv == "Local" || aspEnv == "Test")
+            {
+                app.UseSwagger(options =>
                 {
-                    app.UseDeveloperExceptionPage();
+                    options.SerializeAsV2 = true;
+                });
 
-                    app.UseSwagger(options =>
-                    {
-                        options.SerializeAsV2 = true;
-                    });
-
-                    app.UseSwaggerUI(options =>
-                    {
-                        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-                        options.DocumentTitle = "Project API";
-                    });
-                }
-                logger.LogInformation("Swash Configured.");
-
-            }
-            catch (Exception e)
-            {
-                logger.LogInformation($"Error Occured at ConfigureSwash : {e.GetBaseException().Message}");
-                throw new Exception($"Error Occured at ConfigureSwash : {e.GetBaseException().Message}");
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                });
             }
         }
 
-
-
         internal static void UseSwagger(WebApplication app)
         {
-            var logger = app.Services.GetRequiredService<ILogger<Swash>>();
-            try
+            if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
             {
-                logger.LogInformation("Using Swagger...");
-                if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Local"))
-                {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
-                }
-                logger.LogInformation("Swagger used.");
-
-            }
-            catch (Exception e)
-            {
-                logger.LogInformation($"Error Occured at ConfigureSwash : {e.GetBaseException().Message}");
-                throw new Exception($"Error Occured at ConfigureSwash : {e.GetBaseException().Message}");
+                app.UseSwagger();
+                app.UseSwaggerUI();
             }
         }
     }

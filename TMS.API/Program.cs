@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 AddControllers(builder);
-RegisterSwagger(builder);
+RegisterSwash(builder);
 RegisterDatabase(builder);
 RegisterMediatR(builder);
 RegisterAutomapper(builder);

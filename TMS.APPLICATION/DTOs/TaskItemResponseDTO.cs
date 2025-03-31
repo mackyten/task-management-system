@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TMS.DOMAIN.Enums;
 
-namespace TMS.APPLICATION.Features.DTOs
+namespace TMS.APPLICATION.DTOs
 {
     public class TaskItemResponseDTO
     {
