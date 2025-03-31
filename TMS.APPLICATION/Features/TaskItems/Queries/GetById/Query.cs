@@ -6,7 +6,7 @@ using AutoMapper;
 using MediatR;
 using TMS.APPLICATION.Common;
 using TMS.APPLICATION.Common.Responses;
-using TMS.APPLICATION.Features.DTOs;
+using TMS.APPLICATION.DTOs;
 using TMS.DOMAIN.Interfaces;
 
 namespace TMS.APPLICATION.Features.TaskItems.Queries.GetById

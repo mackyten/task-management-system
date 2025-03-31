@@ -13,6 +13,7 @@ namespace TMS.API.Configuration
         internal static void RegisterDI(WebApplicationBuilder builder)
         {
             builder.Services.AddScoped<ITaskItemRepository, TaskItemRepository>();
+            builder.Services.AddScoped<IAppUserRepository, AppUserRepository>();
         }
     }
 }

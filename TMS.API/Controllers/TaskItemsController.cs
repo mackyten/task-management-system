@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TMS.APPLICATION.Common;
 using TMS.APPLICATION.Common.Responses;
-using TMS.APPLICATION.Features.DTOs;
+using TMS.APPLICATION.DTOs;
 using TMS.APPLICATION.Features.TaskItems.Command.Create;
 using Command = TMS.APPLICATION.Features.TaskItems.Command;
 using Queries = TMS.APPLICATION.Features.TaskItems.Queries;
@@ -43,7 +43,7 @@ namespace TMS.API.Controllers
         /// <summary>
         /// Create a new task
         /// </summary>
-        [HttpPost]
+        [HttpPost()]
         [ProducesResponseType(typeof(SuccessResponse<TaskItemResponseDTO>), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BadRequestResponse), (int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> CreateTask([FromBody] Command.Create.Command command)

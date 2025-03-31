@@ -12,6 +12,7 @@ namespace TMS.APPLICATION.Common.Mappings
         public TaskItemMappingProfile()
         {
             CreateMap<TaskItem, TaskItemMappingProfile>(); // Maps TaskEntity → TaskResponseDto
+
         }
     }
 }
