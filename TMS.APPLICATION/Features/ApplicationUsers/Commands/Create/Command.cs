@@ -41,6 +41,7 @@ namespace TMS.APPLICATION.Features.ApplicationUsers.Commands.Create
                 var user = new ApplicationUser
                 {
                     Email = request.Email,
+                    UserName = request.Email,
                     FirstName = request.FirstName,
                     MiddleName = request.MiddleName,
                     LastName = request.LastName,
@@ -49,14 +50,14 @@ namespace TMS.APPLICATION.Features.ApplicationUsers.Commands.Create
                 };
 
                 //mapper.Map<ApplicationUser>(request);
-                var newUser = await appUserRepository.CreateUser(user, request.Password);
+                var newUser = await appUserRepository.CreateUser(user, request.Password) ?? throw new Exception();
                 var response = mapper.Map<AppUserDTO>(newUser);
 
                 return new SuccessResponse<AppUserDTO>(response);
             }
             catch (Exception e)
             {
-                return new BadRequestResponse("An unexpected error occured.");
+                return new BadRequestResponse(e.GetBaseException().Message);
             }
         }
     }
