@@ -24,9 +24,16 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
             return task;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var task = await dbContext.Tasks.FindAsync(id);
+            if (task == null)
+            {
+                return false;
+            }
+            dbContext.Tasks.Remove(task);
+            await dbContext.SaveChangesAsync();
+            return true;
         }
 
         public Task<TaskItem?> GetById(int id)
