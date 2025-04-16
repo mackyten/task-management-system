@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TMS.APPLICATION.Common.Responses;
 using TMS.APPLICATION.DTOs;
@@ -23,6 +24,7 @@ namespace TMS.API.Controllers
         [HttpGet("{userId}")]
         [ProducesResponseType(typeof(SuccessResponse<AppUserDTO>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(NotFoundResponse), (int)HttpStatusCode.NotFound)]
+        [Authorize]
         public async Task<IActionResult> GetByUserId([FromRoute] string userId)
         {
             var query = new Queries.GetById.Query { Id = userId };
@@ -43,6 +45,7 @@ namespace TMS.API.Controllers
         [HttpPost()]
         [ProducesResponseType(typeof(SuccessResponse<AppUserDTO>), (int)HttpStatusCode.Created)]
         [ProducesResponseType(typeof(BadRequestResponse), (int)HttpStatusCode.BadRequest)]
+        [Authorize]
         public async Task<IActionResult> CreateUser([FromBody] Commands.Create.Command command)
         {
             var result = await Mediator.Send(command);

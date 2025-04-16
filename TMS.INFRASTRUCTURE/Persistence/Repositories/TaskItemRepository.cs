@@ -24,50 +24,12 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
             return task;
         }
 
-        public Task<IEnumerable<TaskItem>> AddManyAsync(IEnumerable<TaskItem> tasks)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<bool> DeleteAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> DeleteManyAsync(IEnumerable<int> taskIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<TaskItem> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        public async Task<TaskItem?> GetById(int id)
-        {
-            var result = await dbContext.Tasks.FindAsync(id);
-            return result;
-        }
-
-        public Task<IEnumerable<TaskItem>> GetByPriorityAsync(TaskPriority priority)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<TaskItem>> GetByStatusAsync(TaskStatus status)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<TaskItem>> GetByUserAsync(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<TaskItem>> GetOverdueTasksAsync()
+        public Task<TaskItem?> GetById(int id)
         {
             throw new NotImplementedException();
         }
@@ -77,29 +39,23 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<TaskItem>> GetRecentTasksAsync(DateTime fromDate, DateTime toDate)
+        public async Task<TaskItem> UpdateAsync(TaskItem task)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<TaskItem>> SearchAsync(string keyword)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TaskItem> UpdateAsync(TaskItem task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> UpdateManyAsync(IEnumerable<TaskItem> tasks)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IEnumerable<TaskItem>> ITaskItemRepository.GetAll()
-        {
-            throw new NotImplementedException();
+            var existingTask = await dbContext.Tasks.FindAsync(task.Id);
+            if (existingTask == null)
+            {
+                throw new Exception("Task not found");
+            }
+            existingTask.Title = task.Title;
+            existingTask.Description = task.Description;
+            existingTask.Status = task.Status;
+            existingTask.DueDate = task.DueDate?.ToUniversalTime();
+            existingTask.Priority = task.Priority;
+            existingTask.AssignedToId = task.AssignedToId;
+            existingTask.AssignedTo = task.AssignedTo;
+            existingTask.DateFinished = task.DateFinished;
+            await dbContext.SaveChangesAsync();
+            return task;
         }
     }
 }

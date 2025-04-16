@@ -24,6 +24,9 @@ namespace TMS.APPLICATION.Common.Mappings
                 .ForMember(dest => dest.Suffix, opt => opt.MapFrom(src => src.Suffix))
                 .ForMember(dest => dest.DateOfBirth, opt => opt.MapFrom(src => src.DateOfBirth.Date)); // Ensure only the date part is mapped if needed
                                                                                                        // Add other mappings here if you have them
+
+            CreateMap<TaskItem, TaskItemResponseDTO>();
+         
         }
     }
 }
