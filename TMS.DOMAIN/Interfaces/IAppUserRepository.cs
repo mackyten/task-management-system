@@ -11,6 +11,7 @@ namespace TMS.DOMAIN.Interfaces
     {
         Task<ApplicationUser?> CreateUser(ApplicationUser NewUser, string Password);
         Task<AuthCredentialDTO> LoginUser(string email, string password);
+        Task<ApplicationUser> GetByIdAsync(string id);
 
     }
 }

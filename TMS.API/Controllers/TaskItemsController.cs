@@ -60,5 +60,23 @@ namespace TMS.API.Controllers
             };
         }
 
+
+        [HttpPut()]
+        [ProducesResponseType((int)HttpStatusCode.NoContent)] // Indicate successful update with no content
+        [ProducesResponseType(typeof(BadRequestResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)] // Consider adding NotFound if the resource doesn't exist
+        [ProducesResponseType((int)HttpStatusCode.InternalServerError)]
+        public async Task<IActionResult> UpdateTask([FromBody] Command.Update.Command command)
+        {
+            var result = await Mediator.Send(command);
+
+            return result switch
+            {
+                BadRequestResponse badRequest => BadRequest(badRequest),
+                SuccessResponse<TaskItemResponseDTO> success => NoContent(),
+                _ => StatusCode(500, new { Message = "An unexpected error occurred during task update." })
+            };
+        }
+
     }
 }

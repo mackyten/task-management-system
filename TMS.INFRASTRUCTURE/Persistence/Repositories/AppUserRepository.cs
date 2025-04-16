@@ -64,5 +64,15 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
 
             return result;
         }
+
+        public async Task<ApplicationUser> GetByIdAsync(string id)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            return user;
+        }
     }
 }
