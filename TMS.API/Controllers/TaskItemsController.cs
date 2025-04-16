@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TMS.APPLICATION.Common;
 using TMS.APPLICATION.Common.Responses;
@@ -17,6 +18,7 @@ namespace TMS.API.Controllers
 {
     [ApiController]
     [Route("api/tasks")]
+    [Authorize]
     public class TaskItemController : BaseController
     {
 

@@ -8,6 +8,7 @@ using TMS.DOMAIN.Entities;
 using Microsoft.AspNetCore.Identity;
 using TMS.APPLICATION.DTOs;
 using TMS.DOMAIN.DTOs;
+using TMS.APPLICATION.Services;
 
 
 namespace TMS.INFRASTRUCTURE.Persistence.Repositories
@@ -17,12 +18,14 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
 
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly ITokenService tokenService;
         private readonly string AuthErrorMessage = "Login Failed. Please check your email or password";
 
-        public AppUserRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AppUserRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, ITokenService tokenService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.tokenService = tokenService;
         }
 
         public async Task<ApplicationUser?> CreateUser(ApplicationUser NewUser, string Password)
@@ -40,7 +43,7 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
             return await userManager.FindByEmailAsync(NewUser.Email!);
         }
 
-        public async Task<AuthenticatedUserDTO> LoginUser(string email, string password)
+        public async Task<AuthCredentialDTO> LoginUser(string email, string password)
         {
             var user = await userManager.FindByEmailAsync(email);
             if (user == null)
@@ -54,7 +57,10 @@ namespace TMS.INFRASTRUCTURE.Persistence.Repositories
                 throw new Exception(AuthErrorMessage);
             }
 
-            var result = new AuthenticatedUserDTO();
+            var result = new AuthCredentialDTO
+            {
+                Token = await tokenService.GenerateTokenAsync(user),
+            };
 
             return result;
         }
