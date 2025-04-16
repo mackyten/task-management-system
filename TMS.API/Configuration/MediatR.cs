@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TMS.APPLICATION.Common;
+using TMS.APPLICATION.Common.Mappings;
 using TMS.APPLICATION.Common.Responses;
 
 namespace TMS.API.Configuration
@@ -20,13 +21,7 @@ namespace TMS.API.Configuration
 
         internal static void RegisterAutomapper(WebApplicationBuilder builder)
         {
-            builder.Services.AddAutoMapper(
-                         configAction =>
-                         {
-                             configAction.ValidateInlineMaps = false;
-                         },
-                         typeof(Response)
-                     );
+            builder.Services.AddAutoMapper(typeof(ApplicationUserMappingProfile).Assembly);
         }
     }
 }
