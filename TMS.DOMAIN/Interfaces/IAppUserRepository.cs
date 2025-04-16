@@ -10,7 +10,7 @@ namespace TMS.DOMAIN.Interfaces
     public interface IAppUserRepository
     {
         Task<ApplicationUser?> CreateUser(ApplicationUser NewUser, string Password);
-        Task<AuthenticatedUserDTO> LoginUser(string email, string password);
+        Task<AuthCredentialDTO> LoginUser(string email, string password);
 
     }
 }

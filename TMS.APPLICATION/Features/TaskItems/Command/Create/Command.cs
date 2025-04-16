@@ -54,9 +54,9 @@ namespace TMS.APPLICATION.Features.TaskItems.Command.Create
                 return new SuccessResponse<TaskItemResponseDTO>(response);
             }
 
-            catch (Exception)
+            catch (Exception e)
             {
-                return new BadRequestResponse("Task not found");
+                return new BadRequestResponse(e.InnerException?.GetBaseException().Message ?? e.GetBaseException().Message);
             }
 
         }
