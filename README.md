@@ -1,5 +1,7 @@
 <h1>TMS.API - Task Management System</h1>
 
+[![CI](https://github.com/mackyten/task-management-system/actions/workflows/ci.yml/badge.svg)](https://github.com/mackyten/task-management-system/actions/workflows/ci.yml)
+
 📌 Overview
 
 TMS.API is a robust and scalable Task Management System API built with .NET 8 and Entity Framework Core. It leverages JWT-based authentication with refresh token support and follows clean architecture principles for maintainability and scalability.
