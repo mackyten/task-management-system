@@ -38,3 +38,21 @@ Scalability: Supports horizontal scaling with a structured database.
  <li> ✅ PostgreSQL Database Integration</li>
  <li> ✅ Entity Framework Core for ORM</li>
 </ul>
+
+<h2>🧭 Getting Started</h2>
+
+Requirements: .NET 8 SDK and a PostgreSQL instance.
+
+<pre>
+dotnet restore
+dotnet ef database update --project TMS.INFRASTRUCTURE --startup-project TMS.API
+dotnet run --project TMS.API
+</pre>
+
+Set the connection string and JWT settings in <code>TMS.API/appsettings.Development.json</code> or user secrets.
+
+<h2>🔌 Endpoints</h2>
+<ul>
+ <li><code>POST /api/users/signup</code>, <code>POST /api/users/signin</code>, <code>GET /api/users/{userId}</code></li>
+ <li><code>GET /api/tasks/{taskId}</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE /api/tasks</code></li>
+</ul>
