@@ -58,3 +58,7 @@ Set the connection string and JWT settings in <code>TMS.API/appsettings.Developm
  <li><code>POST /api/users/signup</code>, <code>POST /api/users/signin</code>, <code>GET /api/users/{userId}</code></li>
  <li><code>GET /api/tasks/{taskId}</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE /api/tasks</code></li>
 </ul>
+
+## License
+
+[MIT](LICENSE)
