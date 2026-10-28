@@ -401,3 +401,6 @@ FodyWeavers.xsd
 
 # OS files
 .DS_Store
+
+# Docker compose secrets
+.env

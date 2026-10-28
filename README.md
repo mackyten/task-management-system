@@ -51,7 +51,22 @@ dotnet ef database update --project TMS.INFRASTRUCTURE --startup-project TMS.API
 dotnet run --project TMS.API
 </pre>
 
-Set the connection string and JWT settings in <code>TMS.API/appsettings.Development.json</code> or user secrets.
+Set the database password and a JWT key (32+ characters) without committing them, for example with user secrets:
+
+<pre>
+cd TMS.API
+dotnet user-secrets set "Jwt:Key" "$(openssl rand -base64 48)"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=TMS_DB;Username=postgres;Password=YOUR_PASSWORD"
+</pre>
+
+<h3>🐳 Or run everything with Docker</h3>
+
+<pre>
+cp .env.example .env     # then edit the values
+docker compose up --build
+</pre>
+
+The API is at <code>http://localhost:8080</code> with Swagger at <code>/swagger</code>; PostgreSQL runs in a container and migrations are applied on startup.
 
 <h2>🔌 Endpoints</h2>
 <ul>

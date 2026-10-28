@@ -1,0 +1,35 @@
+# Local development stack: PostgreSQL + the Task Management API.
+#   cp .env.example .env   (then edit the values)
+#   docker compose up --build
+# Swagger UI: http://localhost:8080/swagger   (migrations run on startup)
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: TMS_DB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d TMS_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development   # enables Swagger
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=TMS_DB;Username=postgres;Password=${POSTGRES_PASSWORD}
+      Jwt__Key: ${JWT_KEY:?set JWT_KEY in .env}
+      Jwt__Issuer: http://localhost:8080
+      Jwt__Audience: http://localhost:8080
+
+volumes:
+  pgdata:
